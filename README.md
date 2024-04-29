@@ -26,7 +26,7 @@ On this page, you can find an example submission for the Grand Challenge platfor
 
 ### What is in the example? 
 Here, we are showcasing an example pytorch model and its inference. 
-The model contains only a Gaussian Blur operator. The model is packaged into jit. See [create_model.py](src/create_model.py) for details.
+The model contains only a Gaussian Blur operator. The model is packaged into jit. See [create_model.py](create_model.py) for details.
 
 We use the latest pytorch container for this example, see [Dockerfile](Dockerfile).
 

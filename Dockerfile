@@ -10,15 +10,6 @@ WORKDIR /opt/app
 
 COPY --chown=user:user requirements.txt /opt/app/
 
-# GPU
-#RUN python -m pip install torch==1.13.1+cu116 \
-#    torchvision==0.14.1+cu116  \
-#    --extra-index-url https://download.pytorch.org/whl/cu116
-#
-## CPU
-#RUN python -m pip install torch  \
-#    torchvision --index-url https://download.pytorch.org/whl/cpu
-
 # You can add any Python dependencies to requirements.txt
 RUN python -m pip install \
     --user \
@@ -28,7 +19,7 @@ RUN python -m pip install \
 
 COPY --chown=user:user resources /opt/app/resources
 COPY --chown=user:user inference.py /opt/app/
-COPY --chown=user:user src /opt/app/src
+COPY --chown=user:user create_model.py /opt/app/
 
-RUN  ["python", "src/create_model.py"]
+RUN  ["python", "create_model.py"]
 ENTRYPOINT ["python", "inference.py"]

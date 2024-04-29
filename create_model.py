@@ -28,5 +28,5 @@ def create_model(model_path: Path):
 
 
 if __name__ == "__main__":
-    model_path = Path(__file__).parent.parent / "resources/model.pth"
+    model_path = Path(__file__).parent / "resources/model.pth"
     create_model(model_path)

@@ -37,38 +37,23 @@ echo "=+= Doing a forward pass"
 # '--volume <NAME>:/tmp'
 #   is added because on Grand Challenge this directory cannot be used to store permanent files
 docker volume create "$DOCKER_NOOP_VOLUME"
-#docker run --rm \
-#    --platform=linux/amd64 \
-#    --network none \
-#    --gpus all \
-#    --volume "$INPUT_DIR":/input \
-#    --volume "$OUTPUT_DIR":/output \
-#    --volume "$DOCKER_NOOP_VOLUME":/tmp \
-#    $DOCKER_TAG
-
 docker run --rm \
     --platform=linux/amd64 \
     --network none \
+    --gpus all \
     --volume "$INPUT_DIR":/input \
     --volume "$OUTPUT_DIR":/output \
     --volume "$DOCKER_NOOP_VOLUME":/tmp \
     $DOCKER_TAG
-docker volume rm "$DOCKER_NOOP_VOLUME"
 
 # Ensure permissions are set correctly on the output
 # This allows the host user (e.g. you) to access and handle these files
-#docker run --rm \
-#    --quiet \
-#    --env HOST_UID=`id --user` \
-#    --env HOST_GID=`id --group` \
-#    --volume "$OUTPUT_DIR":/output \
-#    alpine:latest \
-#    /bin/sh -c 'chown -R ${HOST_UID}:${HOST_GID} /output'
 docker run --rm \
     --quiet \
-    --user $(id -u):$(id -g) \
+    --env HOST_UID=`id --user` \
+    --env HOST_GID=`id --group` \
     --volume "$OUTPUT_DIR":/output \
     alpine:latest \
-    /bin/sh -c 'chown -R $(id -u):$(id -g) /output'
+    /bin/sh -c 'chown -R ${HOST_UID}:${HOST_GID} /output'
 
 echo "=+= Wrote results to ${OUTPUT_DIR}"
