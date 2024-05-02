@@ -96,19 +96,21 @@ def main():
         input_tensor, original_shape = read_image(input_file)
 
         print("Running inference...")
-        result = []
+        result = np.zeros_like(input_tensor, dtype=np.uint16)
         # Run inference one sample at a time
-        for x in input_tensor:
+        for i, x in enumerate(input_tensor):
             x = x.unsqueeze(0)
-            output = model(x).squeeze(0).numpy()
-            result.append(output)
+            output = model(x).squeeze(0).numpy().astype(np.uint16)
+            result[i] = output
 
-        output = np.stack(result, axis=0)
-        output = output.reshape(original_shape)
-        print(f"Output shape: {output.shape}")
+        result = result.reshape(original_shape)
+        if len(result.shape) == 4:
+            result = np.moveaxis(result, 1, -1)
+
+        print(f"Output shape: {result.shape}")
 
         output_path = output_folder / f"{input_file.stem}.mha"
-        save_result_image(image_array=output, result_path=output_path)
+        save_result_image(image_array=result, result_path=output_path)
 
 
 if __name__ == "__main__":

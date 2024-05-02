@@ -10,7 +10,7 @@ class SimpleModel(nn.Module):
 
     def __init__(self):
         super().__init__()
-        self.transform = GaussianBlur(kernel_size=5, sigma=(2, 2))
+        self.transform = GaussianBlur(kernel_size=3, sigma=(1, 1))
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         with torch.no_grad():

@@ -1,4 +1,4 @@
-FROM pytorch/pytorch:2.3.0-cuda11.8-cudnn8-runtime
+FROM --platform=linux/amd64 pytorch/pytorch:1.13.1-cuda11.6-cudnn8-runtime
 
 # Ensures that Python output to stdout/stderr is not buffered: prevents missing information when terminating
 ENV PYTHONUNBUFFERED 1
