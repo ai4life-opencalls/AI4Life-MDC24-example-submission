@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 pytorch/pytorch:1.13.1-cuda11.6-cudnn8-runtime
+FROM --platform=linux/amd64 docker.io/library/python:3.10-slim
 
 # Ensures that Python output to stdout/stderr is not buffered: prevents missing information when terminating
 ENV PYTHONUNBUFFERED 1
@@ -8,8 +8,9 @@ USER user
 
 WORKDIR /opt/app
 
-COPY --chown=user:user requirements.txt /opt/app/
+RUN python -m pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
 
+COPY --chown=user:user requirements.txt /opt/app/
 # You can add any Python dependencies to requirements.txt
 RUN python -m pip install \
     --user \

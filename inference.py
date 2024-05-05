@@ -20,10 +20,10 @@ Happy programming!
 
 from pathlib import Path
 
-import imageio.v3 as imageio
 import numpy as np
 import torch
 import SimpleITK
+import tifffile
 
 
 # Name of the expected input and output folders. DO NOT CHANGE.
@@ -52,7 +52,7 @@ def show_torch_cuda_info():
     print("\n")
 
 
-def save_result_image(image_array: np.ndarray, result_path: Path):
+def save_result_image_mha(image_array: np.ndarray, result_path: Path):
     """Save the result denoised image.
     Be careful to save results only in .mha format!
     Otherwise, the container will fail"""
@@ -61,10 +61,19 @@ def save_result_image(image_array: np.ndarray, result_path: Path):
     SimpleITK.WriteImage(mha_image, result_path, useCompression=True)
 
 
+def save_result_image_tiff(image_array: np.ndarray, result_path: Path):
+    print(f"Writing image to: {result_path}")
+    with tifffile.TiffWriter(result_path) as out:
+        out.write(
+            image_array,
+            resolutionunit=2
+        )
+
+
 def read_image(image_path: Path) -> (torch.Tensor, np.ndarray):
     """Read input noisy image from image_path"""
     print(f"Reading image: {image_path}")
-    input_array = imageio.imread(image_path)
+    input_array = tifffile.imread(image_path)
     input_array = input_array.astype(np.float32)
     print(f"Loaded image shape: {input_array.shape}")
     original_shape = input_array.shape
@@ -96,21 +105,19 @@ def main():
         input_tensor, original_shape = read_image(input_file)
 
         print("Running inference...")
-        result = np.zeros_like(input_tensor, dtype=np.uint16)
+        result = np.zeros_like(input_tensor, dtype=np.float32)
         # Run inference one sample at a time
         for i, x in enumerate(input_tensor):
             x = x.unsqueeze(0)
-            output = model(x).squeeze(0).numpy().astype(np.uint16)
+            output = model(x).squeeze(0).numpy()
             result[i] = output
 
         result = result.reshape(original_shape)
-        if len(result.shape) == 4:
-            result = np.moveaxis(result, 1, -1)
 
         print(f"Output shape: {result.shape}")
 
-        output_path = output_folder / f"{input_file.stem}.mha"
-        save_result_image(image_array=result, result_path=output_path)
+        output_path = output_folder / f"{input_file.stem}.tif"
+        save_result_image_tiff(image_array=result, result_path=output_path)
 
 
 if __name__ == "__main__":

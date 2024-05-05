@@ -28,7 +28,7 @@ On this page, you can find an example submission for the Grand Challenge platfor
 Here, we are showcasing an example pytorch model and its inference. 
 The model contains only a Gaussian Blur operator. The model is packaged into jit. See [create_model.py](create_model.py) for details.
 
-We use the pytorch container for this example, see [Dockerfile](Dockerfile).
+We use a light python container with pytorch-cpu for this example, see [Dockerfile](Dockerfile). You can also use GPU version! 
 
 The container runs [inference.py](inference.py) script, which loops through the noisy images in the `INPUT_PATH` and applies the model to them individually.
 The result denoised images are then saved into `OUTPUT_PATH` folder. 
@@ -37,8 +37,6 @@ The result denoised images are then saved into `OUTPUT_PATH` folder.
 - [ ] Check the `INPUT_INTERFACE` value in the `inference.py` before submitting. More info about the interfaces [below](#interfaces). 
 - [ ] Make sure that the `INPUT_PATH` and `OUTPUT_PATH` are correct. 
 - [ ] Check that all the requirements are contained in the `requirements.txt` and `Dockerfile`
-- [ ] Check that the result is saved in the `.mha` format. Otherwise, the evaluation container won't be able to find your result.
-- [ ] Check that the result image shape is saved in [B,H,W,C] format
 
 ### Interfaces
 Every Algorithm on the Grand Challenge platform must have an input and output interface. 
