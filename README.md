@@ -29,7 +29,7 @@ On this page, you can find an example submission for the Grand Challenge platfor
 1. Example input image is stored in the `test/input/images/image-stack-structured-noise` folder. 
 2. Look through the contents of the [inference.py](inference.py) script. 
 3. Run [test_run.sh](test_run.sh) to build and test the container execution.
-4. The resulting image should appear in the `output/images/image-stack-denoised` folder.
+4. The resulting image should appear in the `test/output/images/image-stack-denoised` folder.
 
 ### What is in the example? 
 Here, we are showcasing an example pytorch model and its inference. 
