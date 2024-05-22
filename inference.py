@@ -26,14 +26,9 @@ import SimpleITK
 import tifffile
 
 
-# Name of the expected input and output folders. DO NOT CHANGE.
-INPUT_PATH = Path("/input/images/")
-OUTPUT_PATH = Path("/output/images/")
-
-# Name of the input grand challenge interface. CHANGE depending on the dataset.
-INPUT_INTERFACE = "image-stack-structured-noise"
-# Name of the output grand challenge interface
-OUTPUT_INTERFACE = "image-stack-denoised"
+# Name of the expected input and output folders. CHANGE depending on the dataset.
+INPUT_PATH = Path("/input/images/image-stack-structured-noise/")
+OUTPUT_PATH = Path("/output/images/image-stack-denoised/")
 
 # Path to the resource containing YOUR model. See 'src/create_model.py' for an example.
 MODEL_PATH = Path("resources/model.pth")
@@ -62,7 +57,7 @@ def save_result_image_mha(image_array: np.ndarray, result_path: Path):
 
 
 def save_result_image_tiff(image_array: np.ndarray, result_path: Path):
-    print(f"Writing image to: {result_path}")
+    print(f"Writing an image to: {result_path}")
     with tifffile.TiffWriter(result_path) as out:
         out.write(
             image_array,
@@ -89,12 +84,10 @@ def read_image(image_path: Path) -> (torch.Tensor, np.ndarray):
 def main():
     show_torch_cuda_info()
 
-    input_folder = INPUT_PATH / INPUT_INTERFACE
-    output_folder = OUTPUT_PATH / OUTPUT_INTERFACE
-    output_folder.mkdir(exist_ok=True, parents=True)
+    OUTPUT_PATH.mkdir(exist_ok=True, parents=True)
 
     # Find all images in the input folder
-    input_files = sorted(input_folder.glob(f"*.tif*"))
+    input_files = sorted(INPUT_PATH.glob(f"*.tif*"))
     print(f"Found files: {input_files}")
 
     # Load the example model
@@ -116,7 +109,7 @@ def main():
 
         print(f"Output shape: {result.shape}")
 
-        output_path = output_folder / f"{input_file.stem}.tif"
+        output_path = OUTPUT_PATH / f"{input_file.stem}.tif"
         save_result_image_tiff(image_array=result, result_path=output_path)
 
 

@@ -17,8 +17,15 @@ Check [The Challenge Page](https://ai4life-mdc24.grand-challenge.org/) for all t
 
 On this page, you can find an example submission for the Grand Challenge platform.
 
+### Submission checklist
+- [ ] Make sure that the `INPUT_PATH` and `OUTPUT_PATH` in your code are correct. More info [below](#data-location).
+- [ ] Check that all the requirements are contained in the `requirements.txt` and `Dockerfile`.
+- [ ] Test your container locally with `test_run.sh`. Check how much memory (RAM) your algorithm requires. 
+- [ ] Create a gzip archive from your image, run `docker save example-algorithm | gzip -c > example-algorithm.tar.gz` 
+- [ ] You are ready to submit! Go to [this page](https://ai4life-mdc24.grand-challenge.org/how-to-submit-you-results/) for further instructions on how to submit to the Grand Challenge.
 
-### How to use this page
+
+### How to use this code
 1. Example input image is stored in the `test/input/images/image-stack-structured-noise` folder. 
 2. Look through the contents of the [inference.py](inference.py) script. 
 3. Run [test_run.sh](test_run.sh) to build and test the container execution.
@@ -33,32 +40,15 @@ We use a light python container with pytorch-cpu for this example, see [Dockerfi
 The container runs [inference.py](inference.py) script, which loops through the noisy images in the `INPUT_PATH` and applies the model to them individually.
 The result denoised images are then saved into `OUTPUT_PATH` folder. 
 
-### Submission checklist
-- [ ] Check the `INPUT_INTERFACE` value in the `inference.py` before submitting. More info about the interfaces [below](#interfaces). 
-- [ ] Make sure that the `INPUT_PATH` and `OUTPUT_PATH` are correct. 
-- [ ] Check that all the requirements are contained in the `requirements.txt` and `Dockerfile`
-
-### Interfaces
-Every Algorithm on the Grand Challenge platform must have an input and output interface. 
-
-For our challenge, we have two input interface options:
-- Stacked images subject to structured noise
-- Stacked images subject to unstructured noise 
-
-And one output option:
-- Stacked images with reduced noise
+### Data location
 
 #### For datasets containing structured noise:
-1. `INPUT_INTERFACE` is **stacked-images-subject-to-structured-noise**.  
-    The input images in the container are stored as `/input/images/image-stack-structured-noise/<uuid>.tif`
-2. `OUPUT_INTERFACE` is `stacked-images-with-reduced-noise`.  
-    The output of your algorithm should be saved as `/input/images/image-stack-denoised/<uuid>.mha`
+1. The input images in the container are stored as `/input/images/image-stack-structured-noise/<uuid>.tif`
+2. The output of your algorithm should be saved as `/input/images/image-stack-denoised/<uuid>.tif`
 
 #### For datasets containing unstructured noise:
-1. `INPUT_INTERFACE` is **stacked-images-subject-to-unstructured-noise**.  
-    The input images in the container are stored as `/input/images/image-stack-unstructured-noise/<uuid>.tif`
-2. `OUPUT_INTERFACE` is also `stacked-images-with-reduced-noise`.  
-    The output of your algorithm should be saved as `/input/images/image-stack-denoised/<uuid>.mha`
+1. The input images in the container are stored as `/input/images/image-stack-unstructured-noise/<uuid>.tif`
+2. The output of your algorithm should be saved as `/input/images/image-stack-denoised/<uuid>.tif`
 
 For more details about the datasets, check out [Data description](https://ai4life-mdc24.grand-challenge.org/data-description/) page!
 
