@@ -21,10 +21,8 @@ Happy programming!
 from pathlib import Path
 
 import numpy as np
-import torch
-import SimpleITK
 import tifffile
-
+import torch
 
 # Name of the expected input and output folders. CHANGE depending on the dataset.
 INPUT_PATH = Path("/input/images/image-stack-structured-noise/")
@@ -45,15 +43,6 @@ def show_torch_cuda_info():
         print(f"\tproperties: {torch.cuda.get_device_properties(current_device)}")
     print("=+=" * 10)
     print("\n")
-
-
-def save_result_image_mha(image_array: np.ndarray, result_path: Path):
-    """Save the result denoised image.
-    Be careful to save results only in .mha format!
-    Otherwise, the container will fail"""
-    print(f"Writing image to: {result_path}")
-    mha_image = SimpleITK.GetImageFromArray(image_array)
-    SimpleITK.WriteImage(mha_image, result_path, useCompression=True)
 
 
 def save_result_image_tiff(image_array: np.ndarray, result_path: Path):
